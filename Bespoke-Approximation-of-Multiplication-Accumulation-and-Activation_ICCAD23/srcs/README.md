@@ -18,19 +18,16 @@ The first line of the yml file sets the new environment's name. In our case the 
 ## How to run it?
 
 After creating and activating the Qkeras environment you can run the QAT and the approximation of the Accumulation with a pretrain model by simply running:
-
-    python3 main.py <dataset_name>
-
+```
+python3 main.py <dataset_name>
+```
 where <dataset_name> = Arrhythmia, Breast_Cancer,  Cardio, Pendigits, RedWine, WhiteWine.
-
-For example if you want to run the optimizations for the Cardio dataset you can simply run:
-
-    python3 main.py Cardio
+For example if you want to run the optimizations for the Cardio dataset you can simply run ``` python3 main.py Cardio ```
 
 If you want to also train the initial floating point model run:
-
-    python3 main.py <dataset_name> True
-
+```    
+python3 main.py <dataset_name> True
+ ```
 
 ## Argamax Approximation
 
