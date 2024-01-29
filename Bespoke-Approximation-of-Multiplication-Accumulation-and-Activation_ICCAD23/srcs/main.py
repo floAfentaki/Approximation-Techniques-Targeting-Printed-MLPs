@@ -7,6 +7,7 @@ if __name__ == "__main__":
     training_flag = False
     if len(sys.argv)==3:    
         training_flag = sys.argv[2]
+        dataset_name = sys.argv[1]
     elif len(sys.argv)==2:
         dataset_name = sys.argv[1]
     elif len(sys.argv)==1:
