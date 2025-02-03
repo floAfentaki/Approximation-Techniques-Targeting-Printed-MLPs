@@ -43,7 +43,7 @@ class AxAccumulation(Problem):
       self.y_train=y_train
 
       # self.acc_loss_cons = baseline_acc-baseline_acc*0.05
-      self.acc_loss_cons = baseline_acc-baseline_acc*0.20
+      self.acc_loss_cons = baseline_acc-baseline_acc*0.30
    
       neurons_hidden_layer, neurons_input_layer= np.shape(self.coefs[0])
       neurons_output_layer, _ = np.shape(self.coefs[1])
@@ -238,8 +238,8 @@ def genetic_wrapper(dataset_name, qmodel):
     network_arch = [neurons_input_layer, neurons_hidden_layer, neurons_output_layer]
 
     #define genetic hyperparameters and create initial population
-    pop_size = 100
-    offsprings_size = 100
+    pop_size = 1000
+    offsprings_size = 1000
     termination = get_termination("n_gen", 30)
 
     initial_population = create_initial_population(pop_size, network_arch, QX, QA)
