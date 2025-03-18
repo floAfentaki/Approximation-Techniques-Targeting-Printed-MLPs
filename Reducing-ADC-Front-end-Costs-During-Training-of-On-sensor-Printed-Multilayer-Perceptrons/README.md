@@ -24,10 +24,9 @@ Printed electronics provide a cost-effective, customizable solution for on-senso
 ├── README.md      # This file
 ├── paper.pdf      # Accepted paper in IEEE Embedded Systems Letters
 ├── src/           # Code for ADC pruning and MLP training
-│   ├── adc_pruning.py      # Python script for ADC pruning
-│   ├── mlp_training.py     # QKeras-based training script
-│   ├── genetic_search.py   # Genetic algorithm for ADC optimization
-│   ├── utils.py            # Helper functions
+│   ├── adc.py                # Python script for ADC pruning
+│   ├── main.py     # main python code
+│   ├── genetic_tuning.py   # Genetic algorithm for ADC optimization
 ├── models/        # Trained models (if applicable)
 ├── data/          # Example datasets (if publicly available)
 ├── results/       # Experimental results (plots, logs, etc.)
