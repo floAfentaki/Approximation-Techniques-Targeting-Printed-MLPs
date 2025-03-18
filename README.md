@@ -10,5 +10,7 @@ This challenge is something we're working on, figuring out how to balance PE's a
 Using different techniques of the Approximation Computing (AxC) paradigm, we succesfully reduce the area and power of the MLP's circuits and enable the printed MLPs to be powered by printed-batteries and printed-harvesters.
 
 ## Available Works
-1. "Bespoke Approximation of Multiplication-Accumulation and Activation Targeting Printed Multilayer Perceptrons" was accepted at 2023 IEEE/ACM International Conference on Computer Aided Design (ICCAD'23)
-2. "Embedding Hardware Approximations in Discrete Genetic-based Training for Printed MLPs" was accepted at IEEE Design Automation and Test in Europe 2024 Conference (DATE'24).
+1. **"Bespoke Approximation of Multiplication-Accumulation and Activation Targeting Printed Multilayer Perceptrons"** was accepted at 2023 IEEE/ACM International Conference on Computer Aided Design **(ICCAD'23)**
+2. **"Embedding Hardware Approximations in Discrete Genetic-based Training for Printed MLPs"** was accepted at IEEE Design Automation and Test in Europe 2024 Conference **(DATE'24)**.
+3. **"Reducing ADC Front-end Costs During Training of On-sensor Printed Multilayer Perceptrons"** was
+Accepted in IEEE Embedded Systems Letters 2024 **(ESL'24)**.
