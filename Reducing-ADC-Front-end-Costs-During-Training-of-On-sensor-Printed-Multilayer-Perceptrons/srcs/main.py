@@ -6,7 +6,35 @@ from QATraining_model import train_floating_model
 from genetic_tuning import genetic_tuning
 from create_verilog import create_verilog
 
-
+"""
+Main script for training and evaluating a floating-point model, performing genetic tuning, and generating Verilog code.
+This script performs the following steps:
+1. Parses command-line arguments to determine the dataset name and training flag.
+2. Trains a floating-point model using the specified dataset.
+3. Evaluates the model's accuracy on the test set.
+4. Extracts model coefficients and biases.
+5. Defines the network topology.
+6. Performs genetic tuning to optimize the model parameters.
+7. Loads evaluation results and parameters from saved files.
+8. Loads test and training datasets.
+9. Generates Verilog code for the optimized model.
+Usage:
+    python main.py [dataset_name] [training_flag]
+Arguments:
+    dataset_name (str): Name of the dataset to be used for training and evaluation.
+    training_flag (bool): Flag indicating whether to perform training (True) or use pre-trained model (False).
+Functions:
+    train_floating_model: Trains a floating-point model on the specified dataset.
+    genetic_tuning: Performs genetic tuning to optimize model parameters.
+    create_verilog: Generates Verilog code for the optimized model.
+Modules:
+    sys: Provides access to command-line arguments.
+    numpy: Provides support for numerical operations.
+    sklearn.metrics: Provides functions for evaluating model performance.
+    QATraining_model: Contains the function for training the floating-point model.
+    genetic_tuning: Contains the function for performing genetic tuning.
+    create_verilog: Contains the function for generating Verilog code.
+"""
 if __name__ == "__main__":
 
     training_flag = False

@@ -10,6 +10,40 @@ from calculate_adc_area import adc_levels_pruned_area
 from mlp_fxp_ps_GZ import mlp_fxp_ps
 import iccad_write_mlp_mergemult_ps_zg as wv
 
+"""
+Create ADC area report for given dataset and evaluations.
+Args:
+    dataset_name (str): Name of the dataset.
+    evaluations (list): List of evaluation metrics.
+    parameters (list): List of parameters corresponding to evaluations.
+    X_test (numpy.ndarray): Test data features.
+Returns:
+    None
+This function generates ADC area reports for different network configurations
+based on the provided evaluations and parameters. It saves the reports in the
+specified project directory.
+"""
+# Additional comments explaining the code logic
+# ...
+"""
+Create Verilog files for given dataset and network configurations.
+Args:
+    dataset_name (str): Name of the dataset.
+    coeffs_hidden (list): List of hidden layer coefficients.
+    coeffs_output (list): List of output layer coefficients.
+    bias_hidden (list): List of hidden layer biases.
+    bias_output (list): List of output layer biases.
+    evaluations (list): List of evaluation metrics.
+    parameters (list): List of parameters corresponding to evaluations.
+    X_test (numpy.ndarray): Test data features.
+    Y_test (numpy.ndarray): Test data labels.
+    X_train (numpy.ndarray): Training data features.
+Returns:
+    None
+This function generates Verilog files for different network configurations
+based on the provided evaluations, parameters, and network weights. It saves
+the Verilog files and related reports in the specified project directory.
+"""
 INPUT_BITS=4
 def create_adcArea(dataset_name, evaluations, parameters, X_test):
 
@@ -30,32 +64,18 @@ def create_adcArea(dataset_name, evaluations, parameters, X_test):
     columns.extend(pruned_values)   
     columns.extend(["BATCH_SIZE"])
     columns.extend(precisions_labels)
-    # columns.extend(["EPOCH"])
     df=pd.DataFrame(evaluations, columns=columns)
     df["accuracy"]=df["accuracy"]*(-1)
-    # df_result = pd.concat([df, df_weights], axis=1, join="inner")
-    # df_result=df_result.sort_values(by=["accuracy"], ascending=False)
-    # df_result=df_result.drop(col=["EPOCH"], axis=1)
-    # num_sensors=len(X_train[0])
-    # num_sensors=11
-    # print(df_result)
+
 
     #create project
     path_project_root = "project/"+dataset_name+"/"
-    # isExist = os.path.exists(path_project_root)
-    # if isExist:
-    #     os.system("rm -rf "+path_project_root)
-    # os.makedirs(path_project_root)
+
 
     for network_id in range(df.shape[0]):
         pareto_point=df.iloc[network_id]
         path_project=f"{path_project_root}/{network_id}"
-        # os.makedirs(path_project)
 
-        # print(pareto_point)
-
-
-        # print(pareto_point[pruned_masks])
         pareto_point_masks=pareto_point[pruned_masks].astype("int32").to_list()
         pareto_point_values=pareto_point[pruned_values].astype("int32").to_list()
         
@@ -71,7 +91,6 @@ def create_adcArea(dataset_name, evaluations, parameters, X_test):
         stdoutbckp=sys.stdout
         sys.stdout=f
 
-        # X_test_levels=adc_levels_pruned(X_test, INPUT_BITS, masks, values) 
         X_test_levels, area, power=adc_levels_pruned_area(X_test, INPUT_BITS, masks, values) 
         print(f"Area: {round(sum(area),1)}")
         print(f"Power: {round(sum(power),1)}")
@@ -89,8 +108,7 @@ def create_verilog(dataset_name, coeffs_hidden, coeffs_output, bias_hidden, bias
     print(num_sensors)
     for i in range(len(evaluations)):
         evaluations[i].extend(parameters[i])
-    # print(evaluations)
-    # evaluations_names=["accuracy", "diff_levels"]
+
     evaluations_names=["accuracy", "diff_levels", "MLParea"]
     pruned_masks=[f"m{i}" for i in  range(num_sensors)]
     pruned_values=[f"v{i}" for i in  range(num_sensors)]
@@ -106,9 +124,6 @@ def create_verilog(dataset_name, coeffs_hidden, coeffs_output, bias_hidden, bias
     df_result = pd.concat([df, df_weights], axis=1, join="inner")
     df_result=df_result.sort_values(by=["accuracy"], ascending=False)
     df_result=df_result.drop(labels=["EPOCH"], axis=1)
-    # num_sensors=len(X_train[0])
-    # num_sensors=11
-    # print(df_result)
 
     #create project
     path_project_root = "project/"+dataset_name+"/"
@@ -125,7 +140,6 @@ def create_verilog(dataset_name, coeffs_hidden, coeffs_output, bias_hidden, bias
         print(pareto_point)
 
 
-        # print(pareto_point[pruned_masks])
         pareto_point_accuracy=pareto_point["accuracy"]
         pareto_point_diff_levels=pareto_point["diff_levels"]
         pareto_point_masks=pareto_point[pruned_masks].astype("int32").to_list()
@@ -134,9 +148,7 @@ def create_verilog(dataset_name, coeffs_hidden, coeffs_output, bias_hidden, bias
         prec=pareto_point[precisions_labels].astype("int32").to_list()
         QW=[(prec[0],prec[1]),(prec[2], prec[3])]
         QB=[(prec[0],prec[1]),(prec[2], prec[3])]
-        # QB=[(prec[4],prec[5]),(prec[6], prec[7])]
         QA_list=[(prec[8],prec[9])]
-        # print(BATCH_SIZE, prec)
 
         pareto_point_coeff_hidden=pareto_point["coeffs_hidden"]
         pareto_point_coeff_output=pareto_point["coeffs_output"]
@@ -169,20 +181,8 @@ def create_verilog(dataset_name, coeffs_hidden, coeffs_output, bias_hidden, bias
         print(f"coefficients: {coefficients}")
         print(f"intercepts: {intercepts}")
 
-        # X_test_levels=adc_levels_pruned(X_test, INPUT_BITS, masks, values) 
-        # f=open(f"{path_project}/pythonADC.rpt","w")
-        # stdoutbckp=sys.stdout
-        # sys.stdout=f
-
-        # X_test_levels=adc_levels_pruned(X_test, INPUT_BITS, masks, values) 
         _, area, power=adc_levels_pruned_area(X_train, INPUT_BITS, masks, values) 
         X_test_levels, _, _=adc_levels_pruned_area(X_test, INPUT_BITS, masks, values) 
-        # print(f"Area: {round(sum(area),1)} um2")
-        # print(f"Power: {round(sum(power)*0.001,5)} uW")
-
-        # f.close()
-        # sys.stdout=stdoutbckp
-
   
         QA=[(QA_list[0][0],QA_list[0][1]),(QA_list[0][0],QA_list[0][1])]
         QX=[(0,4)]
@@ -202,13 +202,10 @@ def create_verilog(dataset_name, coeffs_hidden, coeffs_output, bias_hidden, bias
 
         if dataset_name=='Arrhythmia':
             synth_period = "320000000.00"
-            # synth_period ="320000"
         elif dataset_name=='Pendigits':
             synth_period = "250000000.00"
-            # synth_period ="250000"
         else:
             synth_period = "200000000.00"
-            # synth_period ="200000"
         
         with open(f"{template_name}/scripts/env.sh","r") as f:
             lines = f.readlines()
@@ -226,19 +223,15 @@ def create_verilog(dataset_name, coeffs_hidden, coeffs_output, bias_hidden, bias
         bias_list=qmlp.intercept        
 
         last_layer="linear"
-        # last_layer="relu"
 
         print()
         print()
 
-        # quit()
         print(QW)
         print(QB)
         weight_bias_size=[[(sum(QW[0]), QW[0][0]), (sum(QB[0]), QB[0][0])], [(sum(QW[1]), QW[1][0]), (sum(QB[1]), QB[1][0])]]
         print(weight_bias_size)
 
-        # relu_size=(sum(QA[0])-1,QA[0][1])
-        # relu_size=(sum(QA[0]),QA[0][1])
         relu_size=(sum(QA[0]),QA[0][0])
         sum_relu_size=[
             [(32,6),relu_size],
@@ -265,7 +258,6 @@ def create_verilog(dataset_name, coeffs_hidden, coeffs_output, bias_hidden, bias
         sys.stdout=stdoutbckp
 
         ## xtest
-        # X = np.array(qmlp.X_test)
         f=open(f"{path_project}/sim/sim.Xtest","w")
         np.savetxt(f,((X_test_levels*(2**QX[0][1])).round()).astype(int),fmt='%d',delimiter=' ')
         f.close()
@@ -361,29 +353,3 @@ def create_verilog(dataset_name, coeffs_hidden, coeffs_output, bias_hidden, bias
         f.close()
 
         sys.stdout=stdoutbckp
-
-
-if __name__=="__main__":
-
-    # dataset_name="RedWine"
-    for dataset_name in ['Arrhythmia', 'Balance', 'Breast_Cancer', 'Cardio', 'Mammographic', 'RedWine', 'Seeds', 'WhiteWine']:
-        dataset_path =  "./Networks/"+dataset_name+"/dataset/"
-        X_test = np.load(dataset_path+"X_test_sc.npy")
-        Y_test = np.load(dataset_path+"Y_test.npy")
-        x_test, x_validation, y_test, y_validation = train_test_split(X_test, Y_test, test_size = 0.5)
-        # X_test = np.load(dataset_path+"X_test_wo_valid.npy")
-        # Y_test = np.load(dataset_path+"Y_test_wo_valid.npy")
-
-        coeffs_hidden=[[[4.0, 4.0], [4.0, 4.0], [2.0, 2.0], [4.0, 4.0], [4.0, 4.0], [-2.0, -2.0], [-1.0, 0.25], [-4.0, -2.0], [4.0, 4.0], [-0.25, -1.0], [-2.0, -4.0]], [[4.0, 4.0], [4.0, 4.0], [2.0, 2.0], [4.0, 4.0], [4.0, 4.0], [-2.0, -2.0], [-1.0, 0.25], [-4.0, -2.0], [4.0, 4.0], [-0.25, -1.0], [-2.0, -4.0]], [[4.0, 4.0], [4.0, 4.0], [2.0, 2.0], [4.0, 4.0], [4.0, 4.0], [-2.0, -2.0], [-1.0, 0.25], [-4.0, -2.0], [4.0, 4.0], [-0.25, -1.0], [-2.0, -4.0]], [[4.0, 4.0], [4.0, 4.0], [2.0, 2.0], [4.0, 4.0], [4.0, 4.0], [-2.0, -2.0], [-1.0, 0.25], [-4.0, -2.0], [4.0, 4.0], [-0.25, -1.0], [-2.0, -4.0]], [[4.0, 4.0], [4.0, 4.0], [2.0, 2.0], [4.0, 4.0], [4.0, 4.0], [-2.0, -2.0], [-1.0, 0.25], [-4.0, -2.0], [4.0, 4.0], [-0.25, -1.0], [-2.0, -4.0]]]
-        coeffs_output=[[[-1.625, 0.296875, -5.125, -0.984375, 4.5, 3.75], [3.9375, 0.984375, 5.875, 0.71875, -5.75, -5.875]], [[-1.6875, 0.296875, -5.125, -0.984375, 4.5, 3.75], [3.9375, 0.984375, 5.875, 0.65625, -5.75, -5.875]], [[-1.625, 0.296875, -5.125, -0.984375, 4.5, 3.75], [3.9375, 0.984375, 5.875, 0.71875, -5.75, -5.875]], [[-1.625, 0.296875, -5.125, -0.984375, 4.5, 3.75], [3.9375, 0.984375, 5.875, 0.71875, -5.75, -5.875]], [[-1.625, 0.296875, -5.125, -0.984375, 4.5, 3.75], [3.9375, 0.984375, 5.875, 0.71875, -5.75, -5.875]]]
-        bias_hidden=[[-1.0, -1.0], [-1.0, -1.0], [-1.0, -1.0], [-1.0, -1.0], [-1.0, -1.0]]
-        bias_output=[[-8.0, -2.0, 2.0, 4.0, 2.0, 1.0], [-8.0, -2.0, 2.0, 4.0, 2.0, 2.0], [-8.0, -2.0, 2.0, 4.0, 2.0, 1.0], [-8.0, -2.0, 2.0, 4.0, 2.0, 1.0], [-8.0, -2.0, 2.0, 4.0, 2.0, 1.0]]
-
-        evaluations=np.load(f"Networks/{dataset_name}/parameters/evaluations.npy").tolist()
-        parameters=np.load(f"Networks/{dataset_name}/parameters/parameters.npy").tolist()
-
-        # evaluations=[[-0.5458333492279053, 7.0], [-0.574999988079071, 8.0], [-0.5458333492279053, 7.0], [-0.5458333492279053, 7.0], [-0.5458333492279053, 7.0]]
-        # parameters=[[17470, 24005, 10159, 22403, 27353, 980, 24580, 32402, 24514, 9077, 25862, 3382, 14676, 29772, 9531, 9430, 2971, 635, 6158, 6934, 8701, 16107, 17, 3, 2, 3, 4, 1, 3, 4, 3, 1, 3], [17465, 22671, 10339, 22495, 27934, 599, 24592, 32402, 24514, 9189, 25862, 3382, 14676, 29772, 9621, 9924, 4261, 635, 6221, 6592, 11902, 16107, 17, 3, 2, 3, 4, 1, 3, 4, 3, 1, 3], [17470, 24005, 10134, 22403, 27352, 980, 24580, 32402, 24514, 9187, 25862, 3382, 14676, 29772, 9531, 9917, 2971, 635, 6158, 6934, 8701, 16107, 17, 3, 2, 3, 4, 1, 3, 4, 3, 1, 3], [17465, 22671, 10152, 22493, 27934, 577, 24592, 32402, 24514, 9189, 25862, 3382, 14676, 29772, 9527, 9924, 2889, 635, 6221, 6592, 8704, 16107, 17, 3, 2, 3, 4, 1, 3, 4, 3, 1, 3], [17464, 22671, 10133, 22406, 27373, 576, 24624, 32402, 24514, 9189, 25862, 3382, 14676, 29772, 9531, 9924, 3073, 635, 6221, 6556, 8704, 16107, 17, 3, 2, 3, 4, 1, 3, 4, 3, 1, 3]]
-
-        # create_verilog(dataset_name, coeffs_hidden, coeffs_output, bias_hidden, bias_output, evaluations, parameters)
-        create_adcArea(dataset_name, evaluations, parameters, X_test)

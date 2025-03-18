@@ -22,6 +22,36 @@ from adc import adc_levels_pruned
 from calculate_adc_area import adc_levels_pruned_area
 from QATraining_model import train_quantized_model_parameterized
 
+"""
+This module performs genetic tuning for reducing ADC front-end costs during training of on-sensor printed multilayer perceptrons.
+Classes:
+    MyProblem: Defines the optimization problem for genetic tuning.
+Functions:
+    genetic_tuning(coefficients, dataset_name, topology, X_test, Y_test, X_train, Y_train, baseline_acc):
+        Performs genetic tuning using NSGA2 algorithm.
+    __main__: Entry point for the script execution.
+Attributes:
+    INPUT_BITS (int): Number of input bits for ADC.
+    pool (ThreadPool): Thread pool for parallel processing.
+MyProblem:
+    __init__(self, coefficients, dataset_name, topology, X_test, Y_test, X_train, Y_train, baseline_acc, **kwargs):
+        Initializes the optimization problem.
+    _evaluate(self, x, out, *args, **kwargs):
+        Evaluates the objective functions and constraints for the optimization problem.
+genetic_tuning:
+    Args:
+        coefficients (list): Coefficients for the model.
+        dataset_name (str): Name of the dataset.
+        topology (list): Topology of the neural network.
+        X_test (numpy.ndarray): Test data features.
+        Y_test (numpy.ndarray): Test data labels.
+        X_train (numpy.ndarray): Training data features.
+        Y_train (numpy.ndarray): Training data labels.
+        baseline_acc (float): Baseline accuracy for comparison.
+    Returns:
+        tuple: Evaluations, parameters, coefficients for hidden layers, coefficients for output layers, biases for hidden layers, biases for output layers.
+"""
+
 INPUT_BITS=4
 
 pool = ThreadPool(50)
@@ -86,22 +116,16 @@ class MyProblem(ElementwiseProblem):
             prec=x[self.num_sensors*2+1:-1]
             QW=[(prec[0],prec[1]),(prec[2], prec[3])]
             QB=[(prec[0],prec[1]),(prec[2], prec[3])]
-            # QB=[(prec[4],prec[5]),(prec[6], prec[7])]
             QA=[(prec[8],prec[9])]
 
             EPOCH=x[-1]
 
             X_train_levels, area_adcs, power_adcs=adc_levels_pruned_area(self.X_train, INPUT_BITS, masks, values)
             X_test_levels, _, _=adc_levels_pruned_area(self.X_test, INPUT_BITS, masks, values)
-            # X_train_levels=adc_levels_pruned(self.X_train, INPUT_BITS, masks, values)
-            # X_test_levels=adc_levels_pruned(self.X_test, INPUT_BITS, masks, values) 
 
             qmodel, accuracy = train_quantized_model_parameterized(self.coefficients, self.topology, QW, QB, QA, X_test_levels, self.Y_test, X_train_levels, self.Y_train, 1, BATCH_SIZE, EPOCH)
 
-            # diff_levels=0
-            # for i in X_train_levels:
-            #     diff_levels=+len(np.unique(i))
-                # print(len(i))
+    
 
             inters=[]
             coeffs =[]
@@ -118,10 +142,10 @@ class MyProblem(ElementwiseProblem):
             return -accuracy, sum(area_adcs), MLParea, g1, coeffs, inters
 
         # prepare the parameters for the pool
-        # params = [[X[k]] for k in range(len(X))]
-        # calculate the function values in a parallelized manner and wait until done
-        # results = pool.starmap(my_eval, params)
-        accuracy, diff_levels, MLParea, g1, coeffs, inters = my_eval(x)
+        params = [[X[k]] for k in range(len(X))]
+        calculate the function values in a parallelized manner and wait until done
+        results = pool.starmap(my_eval, params)
+        # accuracy, diff_levels, MLParea, g1, coeffs, inters = my_eval(x)
 
         # store the function values and return them.
         out["F"] = np.array([accuracy, diff_levels, MLParea])

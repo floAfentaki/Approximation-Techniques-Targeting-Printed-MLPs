@@ -1,0 +1,15 @@
+****************************************
+Report : Averaged Power
+	-hierarchy
+Design : top
+Version: T-2022.03-SP5
+Date   : Fri May 31 16:41:46 2024
+****************************************
+
+
+
+                                      Int      Switch   Leak     Total
+Hierarchy                             Power    Power    Power    Power    %
+----------------------------------------------------------------------------------
+top                                   3.98e-04 2.24e-06 6.48e-03 6.88e-03 100.0
+1

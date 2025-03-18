@@ -1,0 +1,63 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : top
+Version: S-2021.06-SP2
+Date   : Fri May 31 05:27:55 2024
+****************************************
+
+Operating Conditions: TT   Library: PPDK_Standard_Library_1.0V_25C_TYP_X1
+Wire Load Model Mode: top
+
+  Startpoint: inp[9] (input port clocked by clk)
+  Endpoint: out[0] (output port clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 r
+  inp[9] (in)                              0.00       0.00 r
+  U139/Y (NAND2X1)                     1032004.75 1032004.75 f
+  U208/Y (NAND2X1)                     887860.50  1919865.25 r
+  U191/Y (AND2X1)                      2169657.50 4089522.75 r
+  U192/Y (INVX1)                       721180.75  4810703.50 f
+  U167/Y (AND2X1)                      2458083.50 7268787.00 f
+  U168/Y (INVX1)                       -1175010.50
+                                                  6093776.50 r
+  U171/Y (AND2X1)                      2198885.00 8292661.50 r
+  U172/Y (INVX1)                       708087.50  9000749.00 f
+  U209/Y (NAND2X1)                     918754.00  9919503.00 r
+  U173/Y (AND2X1)                      1818723.00 11738226.00 r
+  U174/Y (INVX1)                       716056.00  12454282.00 f
+  U151/Y (XNOR2X1)                     6007070.00 18461352.00 f
+  U135/Y (NAND2X1)                     864698.00  19326050.00 r
+  U226/Y (NAND2X1)                     848552.00  20174602.00 f
+  U227/Y (NOR2X1)                      1190098.00 21364700.00 r
+  U228/Y (NAND2X1)                     836718.00  22201418.00 f
+  U229/Y (NOR2X1)                      1190106.00 23391524.00 r
+  U231/Y (AND2X1)                      2391460.00 25782984.00 r
+  U185/Y (AND2X1)                      2191356.00 27974340.00 r
+  U186/Y (INVX1)                       710098.00  28684438.00 f
+  U236/Y (AND2X1)                      1862550.00 30546988.00 f
+  out[0] (out)                             0.00   30546988.00 f
+  data arrival time                               30546988.00
+
+  clock clk (rise edge)                200000000.00
+                                                  200000000.00
+  clock network delay (ideal)              0.00   200000000.00
+  output external delay                    0.00   200000000.00
+  data required time                              200000000.00
+  -----------------------------------------------------------
+  data required time                              200000000.00
+  data arrival time                               -30546988.00
+  -----------------------------------------------------------
+  slack (MET)                                     169453008.00
+
+
+1

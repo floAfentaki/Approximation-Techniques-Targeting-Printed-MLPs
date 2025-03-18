@@ -226,23 +226,3 @@ def adc_levels_pruned_roar(X_fp, bitwidth, masks, values):
                             X_fxp[i][j]=levels[15]    
     return X_fxp
 
-
-# if __name__=="__main__":
-
-    #if mask==1  the node is working 
-    #if mask==0 the node is pruned
-    ##if mask==0 and value==0 the node is hardiwred to 0 (left)
-    ##if mask==0 and value==1 the node is hardiwred to 1 (right)
-    
-        # masks.append([1 for _ in range(7)])
-        # values.append([0 for _ in range(7)])
-    # # X_fp=[[0.4,0.1],[0.1,0.2]]
-    # dataset_path =  "./Networks/RedWine/dataset"
-    # X_train = np.load(dataset_path+'/X_train.npy')
-    # masks=[[0, 1, 1, 1, 1, 1, 1, 1],[0, 1, 1, 1, 1, 1, 1, 1],[0, 1, 1, 1, 1, 1, 1, 1],[0, 1, 1, 1, 1, 1, 1, 1],[0, 1, 1, 1, 1, 1, 1, 1],[0, 1, 1, 1, 1, 1, 1, 1],[0, 1, 1, 1, 1, 1, 1, 1]]
-    # values=[[0, 0, 1, 0, 0, 0, 0, 0],[0, 0, 1, 0, 0, 0, 0, 0],[0, 0, 1, 0, 0, 0, 0, 0],[0, 0, 1, 0, 0, 0, 0, 0],[0, 0, 1, 0, 0, 0, 0, 0],[0, 0, 1, 0, 0, 0, 0, 0],[0, 0, 1, 0, 0, 0, 0, 0]]
-    # X_fxp=adc_levels_pruned(X_train, 4, masks, values)
-    # print(X_fxp)
-
-
-    
