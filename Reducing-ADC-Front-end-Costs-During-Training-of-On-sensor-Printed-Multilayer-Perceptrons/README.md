@@ -39,8 +39,8 @@ Printed electronics provide a cost-effective, customizable solution for on-senso
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo.git
-   cd your-repo
+   git clone git@github.com:floAfentaki/Approximation-Techniques-Targeting-Printed-MLPs.git
+   cd Approximation-Techniques-Targeting-Printed-MLPs/Reducing-ADC-Front-end-Costs-During-Training-of-On-sensor-Printed-Multilayer-Perceptrons
    ```
 2. Create the environment from the src/env.yml file:
    ```bash
